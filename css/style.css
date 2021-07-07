@@ -41,7 +41,7 @@ body {
 
 #menu {
     display: flex;
-    width: 500px;
+    width: 541px;
     padding: 10px;
     justify-content: space-between;
     align-items: center;
@@ -58,15 +58,15 @@ h2 {
 
 }
 
-#default-play {
-    width: 100px;
-    height: 35px;
+#playing {
+    width: 80px;
     border-radius: 5px;
     font-family: 'Roboto';
     font-size: 25px;
     background: #1c819e;
     font-weight: 700;
     color: #ffbe00;
+    text-align: center;
 }
 
 #restart {

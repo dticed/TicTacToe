@@ -5,10 +5,10 @@ const Player = (sign) => {
         return sign;
     }
 
-    return { getSign }
+    return { getSign };
 }
 
-const gameBoard = () => {
+const gameBoard = (() => {
     const board = ["", "", "", "", "", "", "", "", ""];
 
     const setField = (index, sign) => {
@@ -16,6 +16,9 @@ const gameBoard = () => {
     }
 
     const getField = (index) => {
+        if (index > board.length) {
+            return;
+        }
         return board[index];
     }
 
@@ -25,76 +28,104 @@ const gameBoard = () => {
         }
     }
 
-    return { reset, setField, getField }
-}
+    return { setField, getField, reset }
+})();
 
-const checkWinner = () => {
-    const winsArray = [
-        [0,1,2],
-        [3,4,5],
-        [6,7,8],
-        [0,3,6],
-        [1,4,7],
-        [2,5,8],
-        [0,4,8],
-        [2,4,6],
-    ]
-}
+const displayController = (() => {
+    const statusElement = document.querySelector("#status")
+    const fieldElement = document.querySelectorAll(".field")
+    const restartElement = document.querySelector("#restart")
+    const playingElement = document.querySelector("#playing")
+    const elementId = document.getElementById('#data-index')
+    const boardGameElement = document.querySelector('#board')
 
-const play = () => {
-
-}
-
-const jogadas = [];
-var last = jogadas[jogadas.length - 1];
-var defaultPlay = "X";
-
-const statusElement = document.querySelector("#status")
-const fieldElement = document.querySelectorAll(".field")
-const restartElement = document.querySelector("#restart")
-const defaultPlayElement = document.querySelector("#default-play")
-
-defaultPlayElement.addEventListener("click", function () {
-    if (defaultPlay === "X") {
-        defaultPlayElement.innerHTML = "O"
-        defaultPlay = "O"
-    } else {
-        defaultPlayElement.innerHTML = "X"
-        defaultPlay = "X"
-    }
-})
-
-restartElement.addEventListener("click", function () {
-    statusElement.innerHTML = "Click to Start"
-    fieldElement.innerHTML = ""
-})
-
-fieldElement.forEach(element => {
-    element.addEventListener('click', function () {
-        if (last === undefined) {
-            element.innerHTML = defaultPlay;
-            jogadas.push(defaultPlay);
-            defaultPlayElement.disabled = true;
-            if (defaultPlay === "X") {
-                statusElement.innerHTML = "O's turn";
-            } else {
-                statusElement.innerHTML = "X's turn";
+    fieldElement.forEach(element => {
+        element.addEventListener('click', function () {
+            if(gameController.getRound() >= 8) {
+                console.log("meuzovo")
+                boardGameElement.disabled = true;
             }
-            last = jogadas[jogadas.length - 1];
-            console.log(last);
-            console.log(jogadas);
-        } else if (last === "X") {
-            element.innerHTML = "O";
-            jogadas.push("O");
-            last = jogadas[jogadas.length - 1];
-            statusElement.innerHTML = "X's turn";
-        } else if (last === "O") {
-            element.innerHTML = "X";
-            jogadas.push("X");
-            last = jogadas[jogadas.length - 1];
-            statusElement.innerHTML = "O's turn";
-        }
+            console.log(element.getAttribute('data-index'));
+            gameController.play(element.getAttribute('data-index'));
+            updateStatus(gameController.getRound())
+            changePlayer();
+            updateGameBoard();
+        })
     })
-});
+
+    function changePlayer() {
+        if (playingElement.innerHTML === "X") {
+            playingElement.innerHTML = "O"
+        } else {
+            playingElement.innerHTML = "X"
+        }
+    }
+
+    function updateStatus(round) {
+        statusElement.innerHTML = `Round ${round}/9`
+    }
+
+
+    restartElement.addEventListener('click', function () {
+    for (let i = 0; i < fieldElement.length; i++) {
+        gameBoard.setField(i, "");
+        playingElement.innerHTML = "X"
+        gameController.resetGame();
+    }
+    updateGameBoard();
+})
+
+const updateGameBoard = () => {
+    for (let i = 0; i < fieldElement.length; i++) {
+        fieldElement[i].innerHTML = gameBoard.getField(i);
+    }
+};
+
+updateGameBoard()
+
+})();
+
+const gameController = (() => {
+    const playerX = Player('X')
+    const playerO = Player('O');
+    let round = 0;
+
+    function play(index) {
+        if (round % 2 === 0 && gameBoard.getField(index) === "") {
+            gameBoard.setField(index, playerX.getSign());
+            round += 1;
+            return round;
+        } else if (round % 2 === 1 && gameBoard.getField(index) === "") {
+            gameBoard.setField(index, playerO.getSign())
+            round += 1;
+            return round;
+        }
+    };
+
+    const getRound = () => {
+        return round;
+    }
+
+    const resetGame = () => {
+        round = 0;
+    }
+
+    const checkWinner = () => {
+        const wins = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ]
+    };
+
+    return { play, resetGame, getRound };
+})();
+
+
 
 
