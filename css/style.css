@@ -35,8 +35,7 @@ body {
     height: 150px;
     margin: 10px;
     align-items: center;
-    justify-content: space-evenly;
-    
+    justify-content: space-evenly;  
 }
 
 #menu {
@@ -50,11 +49,13 @@ body {
 h1 {
     color: #ffbe00;
     font-family: 'Roboto';
+    font-size: 2.5em;
 }
 
 h2 {
     color: #ffbe00;
     font-family: 'Roboto';
+    font-size: 1.5em;
 
 }
 
@@ -109,4 +110,54 @@ h2 {
     background-color: #1c819e;
 }
 
+@media only screen and (max-width: 660px) {
+    div#container {
+        width: 430px;
+        height: 592.5px;
+    }
+
+    div#navbar {
+        width: 405px;
+        height: 82.5px;
+    }
+
+    div#board {
+        width: 400.75px;
+        height: 404px;
+        grid-gap: 10px;
+    }
+
+    div.field {
+        width: 128px;
+        height: 128px;
+        font-size: 7rem;
+        border: 0.7px solid var(--border-color);
+        
+    }
+
+    div#menu {
+        width: 405.75px;
+        height: 41.25px;
+    }
+
+    div#playing {
+        width: 60px;
+        height: 22.5px;
+        font-size: 18px;
+    }
+
+    button#restart {
+        width: 127.5px;
+        height: 26.25px;
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+}
 
