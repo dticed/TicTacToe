@@ -41,7 +41,7 @@ const displayController = (() => {
 
     fieldElement.forEach(element => {
         element.addEventListener('click', function () {
-            if (gameController.getRound() >= 8 || gameController.getIsOver()) {
+            if (gameController.getIsOver()) {
                 console.log(element.getAttribute('data-index'));
                 console.log("meuzovo")
                 boardGameElement.disabled = true;
@@ -61,8 +61,14 @@ const displayController = (() => {
     }
 
     function updateStatus(round) {
-        statusElement.innerHTML = `Round ${round}/9`
-        if()
+        statusElement.innerHTML = `Round ${round}/9`;
+        if(gameController.getWinner() === "X") {
+            statusElement.innerHTML = "Player X wins"
+        } else if(gameController.getWinner() === "O"){
+            statusElement.innerHTML = "Player O wins"
+        } else if(round === 9 && gameController.getWinner() === "") {
+            statusElement.innerHTML = "It's a draw!"
+        }
     }
 
 
@@ -90,17 +96,18 @@ const gameController = (() => {
     const playerO = Player('O');
     let round = 0;
     let isOver = false;
-    let last = "";
+    let winner = "";
 
     function play(index) {
-        checkWins();
         if (round % 2 === 0 && gameBoard.getField(index) === "") {
             gameBoard.setField(index, playerX.getSign());
             round += 1;
+            checkWins();
             return round;
         } else if (round % 2 === 1 && gameBoard.getField(index) === "") {
             gameBoard.setField(index, playerO.getSign())
             round += 1;
+            checkWins();
             return round;
         }
         
@@ -116,6 +123,12 @@ const gameController = (() => {
 
     const resetGame = () => {
         round = 0;
+        isOver = false;
+        winner = "";
+    }
+
+    const getWinner = () => {
+        return winner;
     }
 
     const wins = [
@@ -137,15 +150,17 @@ const gameController = (() => {
             }
             if (string === "XXX") {
                 console.log("X ganhou")
+                winner = "X"
                 isOver = true;
             } else if (string === "OOO") {
                 console.log("O ganhou")
+                winner = "O"
                 isOver = true;
             } 
         }
     }
 
-    return { play, resetGame, getRound, getIsOver };
+    return { play, resetGame, getRound, getIsOver, getWinner };
 })();
 
 
