@@ -1,7 +1,7 @@
 # TicTacToe
 A Tic-Tac-Toe game. created with HTML, CSS and JS.
 
-Visit the app homepage (https://dticed.github.io/TicTacToe/) :point_left:
+Visit the app homepage [TicTacToe](https://dticed.github.io/TicTacToe/) :point_left:
 
 ## Built With
 
